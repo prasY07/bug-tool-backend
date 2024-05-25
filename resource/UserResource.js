@@ -1,7 +1,7 @@
 
-export const userResource = async (allExams) => {
+export const userResource = async (allUers) => {
    const users = await Promise.all(
-     allExams.map(async (singleUser) => {
+     allUers.map(async (singleUser) => {
       //  const questions = await questionShortResource(singleUser.questions);
        return {
          id: singleUser._id,
@@ -16,9 +16,9 @@ export const userResource = async (allExams) => {
  };
 
 
-export const userShortResource = async (allExams) => {
+export const userShortResource = async (allUsers) => {
   const users = await Promise.all(
-    allExams.map(async (singleUser) => {
+    allUsers.map(async (singleUser) => {
       return {
         id: singleUser._id,
         name: singleUser.name,
