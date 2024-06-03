@@ -1,6 +1,6 @@
 import express from 'express';
 import { login, logout } from '../controllers/Admin/AuthController.js';
-import { info, update, updateStatus, userCreate, userList } from '../controllers/Admin/UserController.js';
+import { allUsers, info, update, updateStatus, userCreate, userList } from '../controllers/Admin/UserController.js';
 import { verifyAdminByToken } from '../middleware/AdminAuthMiddleware.js';
 import { validateUserAdd } from '../request/UserRegisterValidation.js';
 import { validateUserUpdate } from '../request/UserUpdateValidation.js';
@@ -20,6 +20,7 @@ adminApiRoutes.get('/logout',logout);
 
 
 adminApiRoutes.get('/users',userList);
+adminApiRoutes.get('/users/all',allUsers);
 
 adminApiRoutes.post('/user/create',validateUserAdd,userCreate);
 adminApiRoutes.get('/user/:id/information',info);

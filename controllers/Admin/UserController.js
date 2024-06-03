@@ -24,6 +24,19 @@ export const userList = async(req,res) =>{
     }
 }
 
+
+export const allUsers = async(req,res) =>{
+    try {
+        const allusers = await User.find();
+        const data = await userShortResource(allusers);
+        return res.status(200).json(successResponse(data));
+
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json(errorResponse("OOPS! something went wrong"));
+    }
+}
+
 export const userCreate = async(req,res) =>{
     try {
         const {name,email,password} = req.body;

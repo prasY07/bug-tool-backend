@@ -1,7 +1,8 @@
 import { listPagination } from "../../config/constant.js";
 import { errorResponse, successResponse, successWithPagination } from "../../helpers/ResponseBuilder.js";
 import Project from "../../models/Project.js";
-import { singleProjectResource } from "../../resource/ProjectResource.js";
+import User from "../../models/User.js";
+import { projectResource, singleProjectResource } from "../../resource/ProjectResource.js";
 
 
 export const projectList = async(req,res) =>{
@@ -14,7 +15,7 @@ export const projectList = async(req,res) =>{
             .exec();
         const totalItems = await Project.countDocuments();
         const totalPages = Math.ceil(totalItems / perPage);
-        const data       = await userResource(allusers);
+        const data       = await projectResource(allusers);
         return res.status(200).json(successWithPagination(data, currentPage, totalPages));
 
     } catch (err) {
@@ -71,7 +72,7 @@ export const projectUpdate = async(req,res) =>{
 
         }
         const {name,description,selectedUsers,deadline_date} = req.body;
-        await Project.find({ _id: { $in: selectedUsers } })
+        await User.find({ _id: { $in: selectedUsers } })
         .exec().catch((err) => {
             return res.status(403).json(errorResponse("Invalid Users"));
         });
@@ -80,7 +81,10 @@ export const projectUpdate = async(req,res) =>{
 
         getProject.name = name;
         getProject.description = description;
-        getProject.members = selectedUsers;
+        if (selectedUsers && selectedUsers.length > 0) {
+            getProject.members = [...new Set([...getProject.members, ...selectedUsers])]; // Ensuring no duplicates
+        }
+        
         getProject.deadline_date = deadline_date;
         
 

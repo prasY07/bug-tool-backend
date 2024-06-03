@@ -1,13 +1,15 @@
 
 export const projectResource = async (projects) => {
    const allProjects = await Promise.all(
-     projects.map(async (singleUser) => {
-      //  const questions = await questionShortResource(singleUser.questions);
+     projects.map(async (singleProject) => {
+      //  const questions = await questionShortResource(singleProject.questions);
        return {
-         id: singleUser._id,
-         name: singleUser.name,
-         description: singleUser.description,
-         status: singleUser.status
+         id: singleProject._id,
+         name: singleProject.name,
+         description: singleProject.description,
+         status: singleProject.status,
+         project_id: singleProject.project_id,
+         d_date: singleProject.deadline_date,
        };
      })
    );
@@ -20,5 +22,8 @@ export const singleProjectResource = async(singleProject) => {
          id: singleProject._id, 
          name: singleProject.name, 
          status: singleProject.status, 
+         description: singleProject.description, 
+         d_date: singleProject.deadline_date, 
+         members: singleProject.members, 
       };
 }
