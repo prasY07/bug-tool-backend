@@ -1,5 +1,6 @@
 import { listPagination } from "../../config/constant.js";
 import { errorResponse, successResponse, successWithPagination } from "../../helpers/ResponseBuilder.js";
+import Role from "../../models/Role.js";
 import User from "../../models/User.js";
 import { userResource, userShortResource, singleUserResource } from "../../resource/UserResource.js";
 import bcrypt from 'bcryptjs'
@@ -39,9 +40,26 @@ export const allUsers = async(req,res) =>{
 
 export const userCreate = async(req,res) =>{
     try {
-        const {name,email,password} = req.body;
+        const {name,email,password,roles} = req.body;
         var hashPassword = bcrypt.hashSync(password);
-        const newUser = new User({name,email,password:hashPassword});
+
+        // if(roles.length == 0){
+
+        // }
+
+
+        if (!Array.isArray(roles)) {
+             return res.status(403).json(errorResponse("Please select role"));
+        }
+
+        const existingRoles = await Role.find({ slug: { $in: roles } }).exec();
+        
+        if (existingRoles.length !== roles.length) {
+            return res.status(403).json(errorResponse("roles not found"));
+
+        } 
+        
+        const newUser = new User({name,email,password:hashPassword,roles});
         await newUser.save();
         const createdUser = await singleUserResource(newUser);
         return res.status(200).json(successResponse(createdUser));
@@ -79,10 +97,25 @@ export const update = async(req,res) =>{
             return res.status(500).json(errorResponse("Invalid user"));
 
         }
-        const {name,email} = req.body;
+        const {name,email,roles} = req.body;
+       
+
+
+        if (!Array.isArray(roles) || roles.length === 0) {
+            return res.status(403).json(errorResponse("Please select role"));
+       }
+
+       const existingRoles = await Role.find({ slug: { $in: roles } }).exec();
+       
+       if (existingRoles.length !== roles.length) {
+           return res.status(403).json(errorResponse("roles not found"));
+
+       } 
+       
         getUser.name = name;
         getUser.email = email;
-        
+        getUser.roles = roles;
+
 
         await getUser.save();
         const updatedUser = await singleUserResource(getUser);

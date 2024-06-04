@@ -36,5 +36,6 @@ export const singleUserResource = async(singleUser) => {
          name: singleUser.name, 
          email: singleUser.email, 
          status: singleUser.status, 
+         roles: singleUser.roles, 
       };
 }

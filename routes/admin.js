@@ -6,13 +6,14 @@ import { validateUserAdd } from '../request/UserRegisterValidation.js';
 import { validateUserUpdate } from '../request/UserUpdateValidation.js';
 import { projectCreate, projectInfo, projectList, projectStatus, projectUpdate } from '../controllers/Admin/ProjectController.js';
 import { validateProjectAddUpdate } from '../request/ProjectAddUpdateValidation.js';
+import { allRoles } from '../controllers/Admin/RoleController.js';
 
 const adminApiRoutes = express.Router();
 
 
 //Start Auth
 adminApiRoutes.post('/login',login);
-// adminApiRoutes.use(verifyAdminByToken);
+adminApiRoutes.use(verifyAdminByToken);
 
 adminApiRoutes.get('/logout',logout);
 
@@ -37,6 +38,9 @@ adminApiRoutes.get('/project/:id/information',projectInfo);
 
 adminApiRoutes.put('/project/:id/update',validateProjectAddUpdate,projectUpdate);
 adminApiRoutes.patch('/project/:id/update-status',projectStatus);
+
+
+adminApiRoutes.get('/roles',allRoles);
 
 
 
