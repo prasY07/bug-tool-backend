@@ -3,6 +3,7 @@ import { config as configDotenv } from 'dotenv';
 import mongoose from 'mongoose';
 import adminApiRoutes from "./routes/admin.js";
 import cors from 'cors';
+import webRoutes from "./routes/user.js";
 
 const app = express();
 configDotenv();
@@ -10,6 +11,7 @@ configDotenv();
 app.use(cors());
 app.use(express.json());
 app.use('/api/admin/',adminApiRoutes);
+app.use('/api/user/',webRoutes);
 
 const dbString = process.env.dbString;
 await mongoose.connect(dbString)

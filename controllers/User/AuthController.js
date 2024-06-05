@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs'
 import { errorResponse, successResponse, successWithTokenResponse } from "../../helpers/ResponseBuilder.js";
 // import { jwtConfig } from "../../jwt.js";
 import jwt from "jsonwebtoken";
-import Admin from '../../models/Admin.js';
 import { config as configDotenv } from 'dotenv';
+import User from '../../models/User.js';
 configDotenv();
 
 
@@ -12,11 +12,11 @@ export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body
         let existingUser;
-        existingUser = await Admin.findOne({ email });
+        existingUser = await User.findOne({ email });
         if (!existingUser) {
             return res.status(403).json(errorResponse("Email not exists!!"));
         }
-        var isPasswordCorrect = bcrypt.compareSync(password, existingAdmin.password);
+        var isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
         if (!isPasswordCorrect) {
             return res.status(403).json(errorResponse("Please enter correct password"));
         }
@@ -30,7 +30,7 @@ export const login = async (req, res, next) => {
         const expiresIn = process.env.expiresIn;
         const token = jwt.sign(
             {
-                adminId: existingUser._id, // Include user-specific data in the token payload
+                userId: existingUser._id,
                 email: existingUser.email,
             },
             jwtSecret, // Replace with your actual secret key
@@ -40,7 +40,6 @@ export const login = async (req, res, next) => {
         );
         existingUser.tokens.push(token);
 
-        // Save the updated user document with the new token
         await existingUser.save();
         return res.status(200).json(successWithTokenResponse(existingUser, "Login successfully", token));
 

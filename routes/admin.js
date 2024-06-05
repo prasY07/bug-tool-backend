@@ -22,10 +22,8 @@ adminApiRoutes.get('/logout',logout);
 
 adminApiRoutes.get('/users',userList);
 adminApiRoutes.get('/users/all',allUsers);
-
 adminApiRoutes.post('/user/create',validateUserAdd,userCreate);
 adminApiRoutes.get('/user/:id/information',info);
-
 adminApiRoutes.put('/user/:id/update',validateUserUpdate,update);
 adminApiRoutes.patch('/user/:id/update-status',updateStatus);
 
