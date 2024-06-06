@@ -28,3 +28,30 @@ export const getAssignProjects = async (req, res, next) => {
         return res.status(500).json(errorResponse("OOPS! something went wrong"));
     }
 }
+
+
+export const getProjectDetails = async(req,res,next) => {
+    try{
+        const projectId = req.params.id;
+        const user   = req.user;
+        const userId = user._id;
+        const getProject = await Project.findOne({_id:projectId,members:userId});
+        console.log("getProject",getProject);
+
+        
+      
+          // Check if the project exists
+          if (!getProject) {
+            return res.status(404).json({
+              success: false,
+              message: 'Project not found or user not assigned to the project'
+            });
+          }
+      
+
+
+    }catch (err) {
+        console.log(err);
+        return res.status(500).json(errorResponse("OOPS! something went wrong"));
+    }
+}
