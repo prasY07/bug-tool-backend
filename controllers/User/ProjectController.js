@@ -1,6 +1,7 @@
-import { errorResponse, successWithPagination } from "../../helpers/ResponseBuilder.js";
+import { errorResponse, successResponse, successWithPagination } from "../../helpers/ResponseBuilder.js";
 import Project from "../../models/Project.js";
 import { projectShortResource } from "../../resource/ProjectResource.js";
+import { userShortResource } from "../../resource/UserResource.js";
 
 
 export const getAssignProjects = async (req, res, next) => {
@@ -40,16 +41,40 @@ export const getProjectDetails = async(req,res,next) => {
 
         
       
-          // Check if the project exists
           if (!getProject) {
-            return res.status(404).json({
-              success: false,
-              message: 'Project not found or user not assigned to the project'
-            });
+            return res.status(404).json(errorResponse("Project not found or user not assigned to the project"));
+
           }
       
 
 
+    }catch (err) {
+        console.log(err);
+        return res.status(500).json(errorResponse("OOPS! something went wrong"));
+    }
+}
+
+
+export const getProjectAssignMember = async(req,res,next) => {
+
+    try{
+
+        const projectId = req.params.id;
+        const user   = req.user;
+        const userId = user._id;
+        const getProject = await Project.findOne({_id:projectId,members:userId}).populate('members', 'name _id');
+        ;
+        console.log("getProject",getProject.members);
+      
+        if (!getProject) {
+            return res.status(404).json(errorResponse("Project not found or user not assigned to the project"));
+        } 
+
+        const membersExceptSelf = getProject.members.filter(member => !member._id.equals(userId));
+        const users = await userShortResource(membersExceptSelf);
+        return res.status(200).json(successResponse(users));
+
+        
     }catch (err) {
         console.log(err);
         return res.status(500).json(errorResponse("OOPS! something went wrong"));

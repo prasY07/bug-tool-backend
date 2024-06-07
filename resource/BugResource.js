@@ -32,13 +32,13 @@ export const userShortResource = async (allUsers) => {
 };
  
 
-export const singleUserResource = async(singleUser) => {
+export const singleBugResource = async(bug) => {
       return {
-         id: singleUser._id, 
-         name: singleUser.name, 
-         email: singleUser.email, 
-         status: singleUser.status, 
-         roles: singleUser.roles, 
+         id: bug._id, 
+         name: bug.name, 
+         email: bug.email, 
+         status: bug.status, 
+         roles: bug.roles, 
       };
 }
 

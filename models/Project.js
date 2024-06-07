@@ -33,19 +33,19 @@ const projectSchema = new Schema({
   bug_access: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Users',
+      ref: 'User',
     }
   ],
   members: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Users'
+      ref: 'User'
     }
   ],
   remove_members: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Users'
+      ref: 'User'
     }
   ],
   bugs: [

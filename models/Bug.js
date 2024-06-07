@@ -3,7 +3,7 @@ import { Schema } from "mongoose";
 
 
 const BugSchema = new Schema({
-    name: {
+    title: {
         type:String,
         required:true,
         minlength:5,
@@ -21,20 +21,20 @@ const BugSchema = new Schema({
     status:
      { 
         type: String,
-         enum: ['Open', 'In Progress', 'Closed'], default: 'Open'
+         enum: ['Open', 'In Progress', 'Closed','Completed','Re-Open'], default: 'Open'
     },
     project: 
     { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Project',
-         required: true
+        required: true
      },
-    added_by: {
+    assigned_by: {
          type: mongoose.Schema.Types.ObjectId,
           ref: 'User',
          required: true
      },
-    assigned_by: {
+    assigned_to: {
          type: mongoose.Schema.Types.ObjectId, 
          ref: 'User'
      }
