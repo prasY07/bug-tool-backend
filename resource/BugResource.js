@@ -1,18 +1,17 @@
 
-export const userResource = async (allUers) => {
-   const users = await Promise.all(
-     allUers.map(async (singleUser) => {
-      //  const questions = await questionShortResource(singleUser.questions);
+export const bugResource = async (allBugs) => {
+   const bugs = await Promise.all(
+     allBugs.map(async (singleBug) => {
        return {
-         id: singleUser._id,
-         name: singleUser.name,
-         email: singleUser.email,
-         status: singleUser.status
+         id: singleBug._id,
+         title: singleBug.title,
+         description: singleBug.description,
+         status: singleBug.status
        };
      })
    );
  
-   return users;
+   return bugs;
  };
 
 
@@ -20,10 +19,10 @@ export const userResource = async (allUers) => {
 
 export const userShortResource = async (allUsers) => {
   const users = await Promise.all(
-    allUsers.map(async (singleUser) => {
+    allUsers.map(async (singleBug) => {
       return {
-        id: singleUser._id,
-        name: singleUser.name,
+        id: singleBug._id,
+        name: singleBug.name,
       };
     })
   );

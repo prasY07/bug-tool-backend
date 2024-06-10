@@ -5,7 +5,7 @@ export const projectResource = async (projects) => {
       //  const questions = await questionShortResource(singleProject.questions);
        return {
          id: singleProject._id,
-         name: singleProject.name,
+         title: singleProject.title,
          description: singleProject.description,
          status: singleProject.status,
          project_id: singleProject.project_id,
