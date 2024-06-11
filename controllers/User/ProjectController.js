@@ -1,6 +1,6 @@
 import { errorResponse, successResponse, successWithPagination } from "../../helpers/ResponseBuilder.js";
 import Project from "../../models/Project.js";
-import { projectShortResource } from "../../resource/ProjectResource.js";
+import { projectResource, projectShortResource, singleProjectResource } from "../../resource/ProjectResource.js";
 import { userShortResource } from "../../resource/UserResource.js";
 
 
@@ -36,17 +36,16 @@ export const getProjectDetails = async(req,res,next) => {
         const projectId = req.params.id;
         const user   = req.user;
         const userId = user._id;
-        const getProject = await Project.findOne({_id:projectId,members:userId});
+        const getProject = await Project.findOne({_id:projectId,members:userId}).populate('members','_id name');
         console.log("getProject",getProject);
-
-        
       
           if (!getProject) {
             return res.status(404).json(errorResponse("Project not found or user not assigned to the project"));
-
           }
       
-
+          const getProjectDetails =  await singleProjectResource(getProject);
+          
+          return res.status(200).json(successResponse(getProjectDetails));
 
     }catch (err) {
         console.log(err);

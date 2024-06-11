@@ -43,6 +43,6 @@ export const singleProjectResource = async(singleProject) => {
          status: singleProject.status, 
          description: singleProject.description, 
          d_date: singleProject.deadline_date, 
-         members: singleProject.members, 
+         members:  singleProject.members, 
       };
 }

@@ -44,3 +44,13 @@ export const singleUserResource = async(singleUser) => {
 
 
 
+export const singleUserShortResource = async(singleUser) => {
+  return {
+     id: singleUser._id, 
+     name: singleUser.name, 
+    
+  };
+}
+
+
+

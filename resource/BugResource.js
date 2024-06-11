@@ -6,7 +6,9 @@ export const bugResource = async (allBugs) => {
          id: singleBug._id,
          title: singleBug.title,
          description: singleBug.description,
-         status: singleBug.status
+         status: singleBug.status,
+         assigned_by: singleBug.assigned_by,
+         assigned_to: singleBug.assigned_to,
        };
      })
    );

@@ -2,7 +2,7 @@ import { errorResponse, successResponse, successWithPagination } from "../../hel
 import Bug from "../../models/Bug.js";
 import Project from "../../models/Project.js";
 import User from "../../models/User.js";
-import { singleBugResource } from "../../resource/BugResource.js";
+import { bugResource, singleBugResource } from "../../resource/BugResource.js";
 import { projectResource } from "../../resource/ProjectResource.js";
 
 import mongoose from 'mongoose';
@@ -78,13 +78,13 @@ export const getBugs = async(req,res,next)=>{
 
         const currentPage = parseInt(req.query.page) || 1;
         const perPage     = 50;
-        const allBugs    = await Bug.find()
+        const allBugs    = await Bug.find().populate('assigned_by','_id name').populate('assigned_to','_id name')
             .skip((currentPage - 1) * perPage)
             .limit(perPage)
             .exec();
-        const totalItems = await Project.countDocuments();
+        const totalItems = await Bug.countDocuments();
         const totalPages = Math.ceil(totalItems / perPage);
-        const data       = await projectResource(allBugs);
+        const data       = await bugResource(allBugs);
         return res.status(200).json(successWithPagination(data, currentPage, totalPages));
         
     }catch(err){
