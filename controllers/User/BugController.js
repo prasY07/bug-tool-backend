@@ -78,7 +78,7 @@ export const getBugs = async(req,res,next)=>{
 
         const currentPage = parseInt(req.query.page) || 1;
         const perPage     = 50;
-        const allBugs    = await Bug.find().populate('assigned_by','_id name').populate('assigned_to','_id name')
+        const allBugs    = await Bug.find({project:projectId}).populate('assigned_by','_id name').populate('assigned_to','_id name')
             .skip((currentPage - 1) * perPage)
             .limit(perPage)
             .exec();

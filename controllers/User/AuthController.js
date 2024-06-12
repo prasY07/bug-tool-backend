@@ -4,6 +4,7 @@ import { errorResponse, successResponse, successWithTokenResponse } from "../../
 import jwt from "jsonwebtoken";
 import { config as configDotenv } from 'dotenv';
 import User from '../../models/User.js';
+import { singleUserShortResource } from '../../resource/UserResource.js';
 configDotenv();
 
 
@@ -25,7 +26,6 @@ export const login = async (req, res, next) => {
             return res.status(403).json(errorResponse("Your account is inactive. please contact to admin"));
 
         }
-        // User is authenticated, generate a JWT token
         const jwtSecret = process.env.jwtSecret;
         const expiresIn = process.env.expiresIn;
         const token = jwt.sign(
@@ -33,15 +33,16 @@ export const login = async (req, res, next) => {
                 userId: existingUser._id,
                 email: existingUser.email,
             },
-            jwtSecret, // Replace with your actual secret key
+            jwtSecret, 
             {
-                expiresIn: expiresIn, // Token expiration time (e.g., 1 hour)
+                expiresIn: expiresIn, 
             }
         );
         existingUser.tokens.push(token);
 
         await existingUser.save();
-        return res.status(200).json(successWithTokenResponse(existingUser, "Login successfully", token));
+        const loggedInUser = await singleUserShortResource(existingUser);
+        return res.status(200).json(successWithTokenResponse(loggedInUser, "Login successfully", token));
 
 
     } catch (err) {
